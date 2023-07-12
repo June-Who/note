@@ -21,4 +21,5 @@ sudo systemctl start shadowsocks-libev
 sudo systemctl enable shadowsocks-libev
 sudo systemctl status shadowsocks-libev
 
+sudo ufw allow 8888
 
