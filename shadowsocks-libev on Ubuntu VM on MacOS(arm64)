@@ -1,0 +1,24 @@
+Download iso from Ubuntu website, pick arm64 supported version.
+
+Install Ubuntu as guided, then install desktop:
+    sudo apt install ubuntu-desktop-minimal -y (failed when the Network Adapter was Bridged,succeed when it's NAT)
+    
+Intall shadowsocks-libev:
+    sudo apt update
+    sudo apt install shadowsocks-libev
+    sudo nano /etc/shadowsocks-libev/config.jason
+        {
+          "server":["::1", "127.0.0.1"], (change 127.0.0.1 to 0.0.0.0 )
+          "mode":"tcp_and_udp",
+          "server_port":8388,(change to 8888)
+          "local_port":1080,
+          "password":"ACRrobo9ymXb",
+          "timeout":60,
+          "method":"chacha20-ietf-poly1305"
+        }
+        
+sudo systemctl start shadowsocks-libev
+sudo systemctl enable shadowsocks-libev
+sudo systemctl status shadowsocks-libev
+
+
