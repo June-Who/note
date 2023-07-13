@@ -24,4 +24,7 @@ sudo systemctl status shadowsocks-libev
 sudo ufw allow 8888
 =======END============================
 
-Used iphone as a test client, download Potatso to config proxy on iphone, change VM Network Adapter to Bridged, worked well.
+Used iphone as a test client, download Potatso to config proxy on iphone, change VM Network Adapter to Bridged. 
+In test, errors are 'coudn't shakehand with x.x.x.x authentifation error', shutdown and turn on, errors dissapear, test passed.
+Addtional issue: when shutdown VM, lost everything, have to reinstall the iso and all the configuration above.(still dont know why)
+
