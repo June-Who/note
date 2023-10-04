@@ -1,0 +1,57 @@
+built a shadowsocks-libev vpn server on oracle cloud instance, oracle linux 8. 
+most of used code are from: https://www.linuxbabe.com/redhat/shadowsocks-libev-proxy-server-centos 
+
+======here is detail==========
+
+sudo dnf install -y epel-release
+sudo dnf update -y
+sudo dnf install -y snapd (1st try wasn't successful, so used part of code from 
+                          https://snapcraft.io/install/shadowsocks-libev/rhel, which are: 
+                          sudo dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+                          sudo dnf upgrade
+                          )
+                          
+sudo systemctl start snapd.service
+sudo systemctl enable snapd.service
+
+sudo snap install shadowsocks-libev
+
+sudo nano /var/snap/shadowsocks-libev/common/server-config.json
+{
+    "server":["[::0]", "0.0.0.0"],
+    "mode":"tcp_and_udp",
+    "server_port":8888,
+    "local_port":1080,
+    "password":"o+4LmywwopNXSUhA7Wf8wg==",
+    "timeout":60,
+    "method":"chacha20-ietf-poly1305"
+}
+
+
+at this moment,  systemctl start/stop/status was not working, need to write shadowsocks into system service
+sudo nano /etc/systemd/system/shadowsocks-libev.service
+[Unit]
+  Description=Shadowsocks-Libev Server
+  After=network-online.target
+    
+[Service]
+  Type=simple
+  ExecStart=/usr/bin/snap run shadowsocks-libev.ss-server -c /var/snap/shadowsocks-libev/common/server-config.json
+  Restart=always
+  RestartSec=2
+    
+[Install]
+ WantedBy=multi-user.target
+
+ now we can use it:
+ sudo systemctl start shadowsocks-libev.service
+ sudo systemctl enable shadowsocks-libev.service
+ systemctl status shadowsocks-libev.service
+
+ set firewall:
+ sudo firewall-cmd --permanent --add-port=8888/tcp
+sudo firewall-cmd --permanent --add-port=8888/udp
+sudo systemctl reload firewalld
+
+tested on my phone client, unsuccessful. login to oracel cloud web page, added network ingress rules to allow 8888 tcp and udp.
+tested again, successful.
